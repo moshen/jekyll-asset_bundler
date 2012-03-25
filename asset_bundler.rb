@@ -1,7 +1,6 @@
 
 require 'yaml'
 require 'digest/md5'
-require 'yui/compressor'
 
 module Jekyll
 
@@ -87,11 +86,11 @@ module Jekyll
   class Bundle
     @@bundles = {}
     @@default_config = {
-      'compile'  => { 'coffee' => false, 'less' => false },
-      'compress' => { 'js' => true, 'css' => true },
-      'base_path' => '/bundles/',
+      'compile'        => { 'coffee' => false, 'less' => false },
+      'compress'       => { 'js'     => false, 'css'  => false },
+      'base_path'      => '/bundles/',
       'remove_bundled' => false,
-      'dev'      => false
+      'dev'            => false
     }
     attr_reader :content, :hash, :filename, :base
 
@@ -164,6 +163,16 @@ module Jekyll
 
     def compress()
       return if @config['dev']
+
+      case @config['compress'][@type]
+        when 'yui'
+          compress_yui()
+        # TODO: Put call to compress_command here
+      end
+    end
+
+    def compress_yui()
+      require 'yui/compressor'
       case @type
         when 'js'
           c = YUI::JavaScriptCompressor.new
@@ -171,7 +180,7 @@ module Jekyll
         when 'css'
           c = YUI::CssCompressor.new
           @content = c.compress(@content)
-       end
+      end
     end
 
     def markup()

@@ -33,9 +33,8 @@ module Jekyll
         path = File.join(src, a)
         if File.basename(a) !~ /^\.+/ and File.file?(path)
           add_file_by_type(a)
-        elsif File.basename(a) !~ /^\.+/ and File.directory?(path)
-          dir_list = Dir.entries(path).map{|d| File.join(a, d)}
-          add_files_from_list(src, dir_list)
+        else
+          puts "Asset Bundler Error - File: #{path} not found, ignoring..."
         end
       end
     end

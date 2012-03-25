@@ -22,8 +22,11 @@ Currently only supports absolute asset paths in relation to your
 source directory.  For example: `/css/mystyle.css` looks for a file
 in `my_source_dir/css/mystyle.css`.
 
+Works with [Octopress](http://octopress.org/)
+
 TODO:
 
+* Work in `jekyll server` mode without explicit dev declaration
 * Relative paths support
 * CoffeeScript and LessCSS compilation support
 * Google Closure Compiler support
@@ -70,9 +73,11 @@ Some behavior can be modified with settings in your `_config.yml`.  The
 following represents the default configuration:
 
     asset_bundler:
-      compress:  # compresses everything using yuicompressor
-        js: true
-        css: true
+      # compresses nothing by default
+      #   to compress with the yui-compressor gem, use 'yui' here
+      compress:
+        js: false
+        css: false
       base_path: /bundles/
 
       # bundled files will not be copied into your _site or
@@ -85,7 +90,7 @@ following represents the default configuration:
 
 ## Dependencies
 
-Jekyll Asset Bundler uses the yui-compressor gem and (obviously) jekyll.
+Jekyll Asset Bundler uses the yui-compressor gem (when configured) and (obviously) jekyll.
 
 ## Author
 

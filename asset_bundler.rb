@@ -15,7 +15,7 @@ module Jekyll
     end
 
     def render(context)
-      src = context.registers[:site].config["source"]
+      src = context.registers[:site].source
 
       add_files_from_list(src, @assets)
 
@@ -127,7 +127,7 @@ module Jekyll
         return
       end
 
-      src = @context.registers[:site].config["source"]
+      src = @context.registers[:site].source
 
       @files.each do|f|
         @content.concat(File.read(File.join(src, f)))
@@ -148,7 +148,7 @@ module Jekyll
     #   and the remove_bundled option is true
     #   which... it isn't by default
     def remove_bundled()
-      src = @context.registers[:site].config['source']
+      src = @context.registers[:site].source
       @files.each do|f|
         @context.registers[:site].static_files.select! do|s|
           if s.class == StaticFile

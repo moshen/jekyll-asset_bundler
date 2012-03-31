@@ -1,3 +1,10 @@
+#
+# Jekyll Asset Bundler
+#
+# Author : Colin Kennedy
+# Repo   : http://github.com/moshen/jekyll-asset_bundler
+# License: UNLICENSE
+#
 
 require 'yaml'
 require 'digest/md5'

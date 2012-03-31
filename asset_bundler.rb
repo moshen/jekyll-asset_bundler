@@ -30,22 +30,22 @@ module Jekyll
 
       markup = ""
 
-      @files.each do|k,v|
+      @files.each {|k,v|
         markup.concat(Bundle.new(v, k, context).markup())
-      end
+      }
 
       markup
     end
 
     def add_files_from_list(src, list)
-      list.each do|a|
+      list.each {|a|
         path = File.join(src, a)
         if (File.basename(a) !~ /^\.+/ and File.file?(path)) or a =~ /^(https?:)?\/\//i
           add_file_by_type(a)
         else
           puts "Asset Bundler Error - File: #{path} not found, ignoring..."
         end
-      end
+      }
     end
 
     def add_file_by_type(file)
@@ -64,13 +64,13 @@ module Jekyll
 
   class BundleGlobTag < BundleTag
     def add_files_from_list(src, list)
-      list.each do|a|
-        Dir.glob(File.join(src, a)) do|f|
+      list.each {|a|
+        Dir.glob(File.join(src, a)) {|f|
           if f !~ /^\.+/ and File.file?(f)
             add_file_by_type(f.sub(src,''))
           end
-        end
-      end
+        }
+      }
     end
 
   end
@@ -85,9 +85,9 @@ module Jekyll
     end
 
     def add_files_from_list(src, list)
-      list.each do|a|
+      list.each {|a|
         add_file_by_type(a)
-      end
+      }
     end
   end
 
@@ -145,7 +145,7 @@ module Jekyll
 
       src = @context.registers[:site].source
 
-      @files.each do|f|
+      @files.each {|f|
         if f =~ /^(https?:)?\/\//i
           # Make all requests via http
           f = "http:#{f}" if !$1
@@ -154,7 +154,7 @@ module Jekyll
         else
           @content.concat(File.read(File.join(src, f)))
         end
-      end
+      }
 
       @hash = Digest::MD5.hexdigest(@content)
       @filename = "#{@hash}.#{@type}"
@@ -213,15 +213,15 @@ module Jekyll
     #   which... it isn't by default
     def remove_bundled()
       src = @context.registers[:site].source
-      @files.each do|f|
-        @context.registers[:site].static_files.select! do|s|
+      @files.each {|f|
+        @context.registers[:site].static_files.select! {|s|
           if s.class == StaticFile
             s.path != File.join(src, f)
           else
             true
           end
-        end
-      end
+        }
+      }
     end
 
     def compress()
@@ -260,22 +260,22 @@ module Jekyll
       else
         mode = "r"
         mode = "r+" if !infile
-        IO.popen(command, mode) do|i|
+        IO.popen(command, mode) {|i|
           if !infile
             i.puts(@content)
             i.close_write()
           end
           @content = i.gets() if !outfile
-        end
+        }
       end
 
       if outfile
         @content = File.read( outfile )
       end
 
-      used_files.each do|f|
+      used_files.each {|f|
         File.unlink( f )
-      end
+      }
     end
 
     def compress_yui()
@@ -306,7 +306,7 @@ module Jekyll
 
     def dev_markup()
       output = ''
-      @files.each do|f|
+      @files.each {|f|
         case @type
           when 'js'
             output.concat("<script type='text/javascript' src='#{f}'></script>\n")
@@ -317,7 +317,7 @@ module Jekyll
           when 'less'
             output.concat("<link rel='stylesheet/less' type='text/css' href='#{f}' />\n")
         end
-      end
+      }
 
       return output
     end
@@ -334,9 +334,9 @@ module Jekyll
       return false if File.exists?(dest_path)
 
       FileUtils.mkdir_p(File.dirname(dest_path))
-      File.open(dest_path, "w") do|o|
+      File.open(dest_path, "w") {|o|
         o.write(@content)
-      end
+      }
 
       true
     end

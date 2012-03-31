@@ -139,16 +139,35 @@ module Jekyll
       @files.each do|f|
         @content.concat(File.read(File.join(src, f)))
       end
-      
-      # TODO: Compilation of Less and CoffeeScript would go here
-      compress() if @config['compress'][@type]
+
       @hash = Digest::MD5.hexdigest(@content)
       @filename = "#{@hash}.#{@type}"
+      cache_file = File.join(cache_dir(), @filename)
+
+      if File.readable?(cache_file) and @config['compress'][@type]
+        @content = File.read(cache_file)
+      elsif @config['compress'][@type]
+        # TODO: Compilation of Less and CoffeeScript would go here
+        compress()
+        File.open(cache_file, "w") {|f|
+          f.write(@content)
+        }
+      end
 
       @context.registers[:site].static_files.push(self)
       remove_bundled() if @config['remove_bundled']
 
       @@bundles[@filename_hash] = self
+    end
+
+    def cache_dir()
+      cache_dir = File.expand_path( "../_asset_bundler_cache",
+                                    @context.registers[:site].plugins )
+      if( !File.directory?(cache_dir) )
+        FileUtils.mkdir_p(cache_dir)
+      end
+
+      cache_dir
     end
 
     # Removes StaticFiles from the _site if they are bundled

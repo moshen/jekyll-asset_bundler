@@ -223,7 +223,51 @@ module Jekyll
       case @config['compress'][@type]
         when 'yui'
           compress_yui()
-        # TODO: Put call to compress_command here
+        else
+          compress_command()
+      end
+    end
+
+    def compress_command()
+      temp_path = cache_dir()
+      command = @config['compress'][@type]
+      infile = false
+      outfile = false
+      used_files = []
+
+      if command =~ /:infile/
+        infile = File.new(File.join(temp_path, "infile.#{@filename_hash}.#{@type}"), mode="w")
+        command.sub!( /:infile/, "\"#{infile.path}\"")
+        infile.write(@content)
+        used_files.push( infile.path )
+        infile.close()
+      end
+      if command =~ /:outfile/
+        outfile = File.join(temp_path, "outfile.#{@filename_hash}.#{@type}")
+        command.sub!( /:outfile/, "\"#{outfile}\"")
+        used_files.push( outfile )
+      end
+
+      if infile and outfile
+        `#{command}`
+      else
+        mode = "r"
+        mode = "r+" if !infile
+        IO.popen(command, mode) do|i|
+          if !infile
+            i.puts(@content)
+            i.close_write()
+          end
+          @content = i.gets() if !outfile
+        end
+      end
+
+      if outfile
+        @content = File.read( outfile )
+      end
+
+      used_files.each do|f|
+        File.unlink( f )
       end
     end
 

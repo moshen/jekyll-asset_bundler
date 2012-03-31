@@ -114,11 +114,18 @@ module Jekyll
     end
 
     def self.config(context)
+      ret_config = nil
       if context.registers[:site].config.key?("asset_bundler")
-        @@default_config.deep_merge(context.registers[:site].config["asset_bundler"])
+        ret_config = @@default_config.deep_merge(context.registers[:site].config["asset_bundler"])
       else
-        @@default_config
+        ret_config = @@default_config
       end
+
+      if context.registers[:site].config['server']
+        ret_config['dev'] = true
+      end
+
+      ret_config
     end
 
     def load_content()

@@ -16,22 +16,33 @@ To install this plugin:
 
     git submodule add git://github.com/moshen/jekyll-asset_bundler.git _plugins/asset_bundler
 
+To update:
+
+    cd _plugins/asset_bundler
+    git pull origin master
+
 ## Status
 
 Currently only supports absolute asset paths in relation to your
 source directory.  For example: `/css/mystyle.css` looks for a file
 in `my_source_dir/css/mystyle.css`.
 
-Works with [Octopress](http://octopress.org/)
+#### Features
 
-TODO:
+* Works with [Octopress](http://octopress.org/)
+* Custom commands for bundle compression
+* Compressed bundle caching
+* Bundling and caching of remote assets
+* Dev mode, for easy site development with all assets
+* Dev-only asset inclusion
 
-* Work in `jekyll server` mode without explicit dev declaration
+#### TODO
+
 * Relative paths support
 * CoffeeScript and LessCSS compilation support
 * Google Closure Compiler support
 
-####Is it production ready?
+#### Is it production ready?
 
 Consider this alpha software, though for small Jekyll sites you
 should have no problem using it.
@@ -75,6 +86,19 @@ following represents the default configuration:
     asset_bundler:
       # compresses nothing by default
       #   to compress with the yui-compressor gem, use 'yui' here
+      #   to compress with a custom command, enter it for the
+      #   appropriate asset type:
+      #     compress:
+      #       js: yuicompressor -o :outfile :infile
+      #
+      #   this example will run the yuicompressor command while
+      #   substituting :outfile and :infile for temporary files
+      #   stored in _asset_bundler_cache
+      #
+      #   if either :outfile or :infile are omitted, stdout and
+      #   stdin will be used.  WARNING, stdin and stdout are done
+      #   with IO.popen , which doesn't work on Windows
+      #
       compress:
         js: false
         css: false
@@ -82,7 +106,7 @@ following represents the default configuration:
 
       # bundled files will not be copied into your _site or
       #   alternative destination folder
-      remove_bundled: false 
+      remove_bundled: false
 
       # enables 'dev mode', no bundles are created and all
       #   referenced files are included individually

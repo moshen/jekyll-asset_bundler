@@ -1,6 +1,8 @@
 
 require 'yaml'
 require 'digest/md5'
+require 'net/http'
+require 'uri'
 
 module Jekyll
 
@@ -31,7 +33,7 @@ module Jekyll
     def add_files_from_list(src, list)
       list.each do|a|
         path = File.join(src, a)
-        if File.basename(a) !~ /^\.+/ and File.file?(path)
+        if (File.basename(a) !~ /^\.+/ and File.file?(path)) or a =~ /^(https?:)?\/\//i
           add_file_by_type(a)
         else
           puts "Asset Bundler Error - File: #{path} not found, ignoring..."
@@ -137,7 +139,14 @@ module Jekyll
       src = @context.registers[:site].source
 
       @files.each do|f|
-        @content.concat(File.read(File.join(src, f)))
+        if f =~ /^(https?:)?\/\//i
+          # Make all requests via http
+          f = "http:#{f}" if !$1
+          f.sub!( /^https/i, "http" ) if $1 =~ /^https/i
+          @content.concat(remote_asset_cache(URI(f)))
+        else
+          @content.concat(File.read(File.join(src, f)))
+        end
       end
 
       @hash = Digest::MD5.hexdigest(@content)
@@ -168,6 +177,28 @@ module Jekyll
       end
 
       cache_dir
+    end
+
+    def remote_asset_cache(uri)
+      cache_file = File.join(cache_dir(),
+                             "remote.#{Digest::MD5.hexdigest(uri.to_s)}.#{@type}")
+      content = ""
+
+      if File.readable?(cache_file)
+        content = File.read(cache_file)
+      else
+        begin
+          puts "Asset Bundler - Downloading: #{uri.to_s}"
+          content = Net::HTTP.get(uri)
+          File.open(cache_file, "w") {|f|
+            f.write( content )
+          }
+        rescue
+          puts "Asset Bundler - Error: There was a problem downloading #{f}\n  #{$!}"
+        end
+      end
+
+      return content
     end
 
     # Removes StaticFiles from the _site if they are bundled

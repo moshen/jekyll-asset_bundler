@@ -237,7 +237,7 @@ module Jekyll
 
     def compress_command()
       temp_path = cache_dir()
-      command = @config['compress'][@type]
+      command = String.new(@config['compress'][@type])
       infile = false
       outfile = false
       used_files = []

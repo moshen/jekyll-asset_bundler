@@ -243,16 +243,19 @@ module Jekyll
       used_files = []
 
       if command =~ /:infile/
-        infile = File.new(File.join(temp_path, "infile.#{@filename_hash}.#{@type}"), mode="w")
-        command.sub!( /:infile/, "\"#{infile.path}\"")
-        infile.write(@content)
-        used_files.push( infile.path )
-        infile.close()
+        File.open(File.join(temp_path, "infile.#{@filename_hash}.#{@type}"), mode="w") {|f|
+          f.write(@content)
+          used_files.push( f.path )
+          infile = f.path
+        }
+        command.sub!( /:infile/, "\"#{infile.gsub(File::SEPARATOR,
+                               File::ALT_SEPARATOR || File::SEPARATOR)}\"")
       end
       if command =~ /:outfile/
         outfile = File.join(temp_path, "outfile.#{@filename_hash}.#{@type}")
-        command.sub!( /:outfile/, "\"#{outfile}\"")
         used_files.push( outfile )
+        command.sub!( /:outfile/, "\"#{outfile.gsub(File::SEPARATOR,
+                               File::ALT_SEPARATOR || File::SEPARATOR)}\"")
       end
 
       if infile and outfile

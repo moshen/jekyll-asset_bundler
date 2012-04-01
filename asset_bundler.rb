@@ -50,7 +50,7 @@ module Jekyll
 
     def add_file_by_type(file)
       if file =~ /\.([^\.]+)$/
-        type = $1
+        type = $1.downcase()
         return if @@supported_types.index(type).nil?
         if !@files.key?(type)
           @files[type] = []

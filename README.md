@@ -1,6 +1,6 @@
 # Jekyll Asset Bundler
 
-Jekyll Asset Bundler is a Jekyll plugin for er, bundling assets.
+Jekyll Asset Bundler is a Jekyll plugin for... bundling assets.
 It is hacked onto... I mean, utilizes deep integration with Jekyll
 for a seamless deployment experience.
 
@@ -12,7 +12,7 @@ for your Jekyll project.
 If your Jekyll project is in a git repository, you can easily
 manage your plugins by utilizing git submodules.
 
-To install this plugin:
+To install this plugin as a git submodule:
 
     git submodule add git://github.com/moshen/jekyll-asset_bundler.git _plugins/asset_bundler
 
@@ -153,7 +153,10 @@ following represents the default configuration:
 
 ## Dependencies
 
-Jekyll Asset Bundler uses the yui-compressor gem (when configured) and (obviously) jekyll.
+Jekyll Asset Bundler uses the
+[yui-compressor](https://github.com/sstephenson/ruby-yui-compressor) or
+[closure-compiler](https://github.com/documentcloud/closure-compiler) gems
+(when configured) and (obviously) jekyll.
 
 ## Author
 

@@ -42,6 +42,16 @@ in `my_source_dir/css/mystyle.css`.
 * CoffeeScript and LessCSS compilation support
 * Google Closure Compiler support
 
+#### Notes
+
+*v0.05* - Changed from using Liquid::Tags to Liquid::Blocks.
+This will break on existing bundle markup if you upgrade.
+
+Why change it?  Well, Liquid::Tags have to be on one line,
+whereas Liquid::Blocks do not, also it opens up some more
+flexibility, as additional options could be included in the
+tag text.
+
 #### Is it production ready?
 
 Consider this alpha software, though for small Jekyll sites you
@@ -50,19 +60,43 @@ should have no problem using it.
 ## Usage
 
 Once installed in your `_plugins` folder Jekyll Asset Bundler provides
-Liquid::Tags to use instead of the typical `<script>` and `<ref>` tags
-for including JavaScript and CSS.  Each of the following tags takes
-a [YAML](http://yaml.org) formatted array as it's sole argument.
+Liquid::Blocks to use which will generate the appropriate
+markup for including JavaScript and CSS.
+Each of the following blocks consumes a [YAML](http://yaml.org)
+formatted array.
 
-### Liquid::Tags
+### Liquid::Blocks
 
-    {% bundle [/js/main.js, /js/somethingelse.js] %}
+#### bundle
+
+    {% bundle %} [/js/main.js, /js/somethingelse.js] {% endbundle %}
+
+Is equal to:
+
+    {% bundle %}
+    - /js/main.js
+    - /js/somethingelse.js
+    {% endbundle %}
+
+Remote assets can also be bundled:
+
+    {% bundle %}
+    - http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js
+    - //cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.1/underscore-min.js
+    - https://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js
+    - /js/my_local_javascript.js
+    {% endbundle %}
 
 The `bundle` tag will concatenate the provided scripts and compress them
 (if desired), making a hash of the new file to use
 as a filename.  The proper markup is inserted to include your bundle file.
 
-    {% bundle_glob [/js/*.js, /css/*.css] %}
+#### bundle_glob
+
+    {% bundle_glob %}
+    - /js/*.js
+    - /css/*.css
+    {% endbundle_glob %}
 
 The `bundle_glob` tag uses the
 [Ruby Dir.glob](http://ruby-doc.org/core-1.9.3/Dir.html#method-c-glob)
@@ -70,11 +104,16 @@ method to include multiple assets.
   WARNING: assets will be included in alphanumeric order,
 this may screw something up.
 
-    {% dev_assets [/js/less.js] %}
+#### dev_assets
+
+    {% dev_assets %}
+    - /js/less.js
+    {% enddev_assets %}
 
 The `dev_assets` tag includes the normal markup for the referenced
 assets only in 'dev mode'.  The array items can either be local files
-or urls for external scripts.  At any other time, it does nothing.
+or urls for external scripts and are included as-is.
+At any other time, it does nothing.
 In a future version (hopefully soon), this will play a role in
 utilizing things like LessCSS and CoffeeScript.
 

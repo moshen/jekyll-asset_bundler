@@ -265,6 +265,8 @@ END
       case @config['compress'][@type]
         when 'yui'
           compress_yui()
+        when 'closure'
+          compress_closure()
         else
           compress_command()
       end
@@ -320,11 +322,17 @@ END
       require 'yui/compressor'
       case @type
         when 'js'
-          c = YUI::JavaScriptCompressor.new
-          @content = c.compress(@content)
+          @content = YUI::JavaScriptCompressor.new.compress(@content)
         when 'css'
-          c = YUI::CssCompressor.new
-          @content = c.compress(@content)
+          @content = YUI::CssCompressor.new.compress(@content)
+      end
+    end
+
+    def compress_closure()
+      require 'closure-compiler'
+      case @type
+        when 'js'
+          @content = Closure::Compiler.new.compile(@content)
       end
     end
 

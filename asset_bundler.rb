@@ -22,44 +22,24 @@ module Jekyll
       @files = {}
     end
 
-    # For the Liquid::Block to work, we need to remove
-    #   the contents of the Block from the token list
-    #   and use said contents as our YAML asset array
-    def parse(tokens)
-      @nodelist ||= []
-      @nodelist.clear
-      raw_markup = ""
-
-      while token = tokens.shift
-        if token =~ FullToken
-          if block_delimiter == $1
-            end_tag
-            begin
-              @assets = YAML::load(raw_markup)
-            rescue
-              puts <<-END
+    def render(context)
+      src = context.registers[:site].source
+      raw_markup = super(context)
+      begin
+        @assets = YAML::load(raw_markup)
+      rescue
+        puts <<-END
 Asset Bundler - Error: Problem parsing a YAML bundle
 #{raw_markup}
 
 #{$!}
 END
-            end
-
-            if @assets.class != Array
-              puts "Asset Bundler - Error: YAML bundle is not an Array\n#{raw_markup}"
-              @assets = []
-            end
-            return
-          end
-        end
-
-        raw_markup.concat(token)
-        @nodelist << token if not token.empty?
       end
-    end
 
-    def render(context)
-      src = context.registers[:site].source
+      if @assets.class != Array
+        puts "Asset Bundler - Error: YAML bundle is not an Array\n#{raw_markup}"
+        @assets = []
+      end
 
       add_files_from_list(src, @assets)
 

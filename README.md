@@ -123,33 +123,69 @@ Some behavior can be modified with settings in your `_config.yml`.  The
 following represents the default configuration:
 
     asset_bundler:
-      # compresses nothing by default
-      #   to compress with the yui-compressor gem, use 'yui' here
-      #   to compress with a custom command, enter it for the
-      #   appropriate asset type:
-      #     compress:
-      #       js: yuicompressor -o :outfile :infile
-      #
-      #   this example will run the yuicompressor command while
-      #   substituting :outfile and :infile for temporary files
-      #   stored in _asset_bundler_cache
-      #
-      #   if either :outfile or :infile are omitted, stdout and
-      #   stdin will be used.  WARNING, stdin and stdout are done
-      #   with IO.popen , which doesn't work on Windows
-      #
       compress:
         js: false
         css: false
       base_path: /bundles/
-
-      # bundled files will not be copied into your _site or
-      #   alternative destination folder
       remove_bundled: false
-
-      # enables 'dev mode', no bundles are created and all
-      #   referenced files are included individually
       dev: false
+
+Here is a breakdown of each configuration option under the top level
+`asset_bundler` key.
+
+### compress:
+
+Compresses nothing by default. Change the `js` and `css` keys to
+modify compression behavior.
+
+#### js:
+
+To compress with the yui-compressor gem, use 'yui' here,
+to compress with the closure compiler gem, use 'closure' here,
+to compress with a custom command, enter it for the
+appropriate asset type:
+
+    compress:
+      js: yuicompressor -o :outfile :infile
+
+This example will run the yuicompressor command while
+substituting :outfile and :infile for temporary files
+stored in `_asset_bundler_cache`.
+
+If either :outfile or :infile are omitted, stdout and
+stdin will be used.  *WARNING*, stdin and stdout are done
+with IO.popen , which doesn't work on Windows
+
+#### css:
+
+Takes the exact same arguments as `js:`, with the exception
+of the Google Closure Compiler ( it's JavaScript only ).
+
+### base_path:
+
+Where the bundles will be copied within your destination
+folder.
+
+Default: `bundles/`.
+
+### remove_bundled:
+
+If set to true, will remove the files included in your
+bundles from the destination folder.
+
+Default: `false`.
+
+### dev:
+
+If set to true, enables dev mode.  When dev mode is active,
+no bundles are created and all the referenced files are
+included individually without modification.
+
+Dev mode is also automatically enabled when using
+`jekyll server` or when a top level configuration key: `dev`
+is set to true.
+
+Default: `false`.
 
 ## Dependencies
 

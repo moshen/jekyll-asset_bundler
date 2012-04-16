@@ -6,7 +6,7 @@ for a seamless deployment experience.
 
 ## Installation
 
-Copy or link `asset_bundler.rb` into your `_plugins` folder 
+Copy or link `asset_bundler.rb` into your `_plugins` folder
 for your Jekyll project.
 
 If your Jekyll project is in a git repository, you can easily
@@ -54,7 +54,7 @@ tag text.
 
 #### Is it production ready?
 
-Consider this alpha software, though for small Jekyll sites you
+Consider this beta software, though for small Jekyll sites you
 should have no problem using it.
 
 ## Usage
@@ -86,6 +86,10 @@ Remote assets can also be bundled:
     - https://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js
     - /js/my_local_javascript.js
     {% endbundle %}
+
+Remote assets will be cached in the `_asset_bundler_cache` folder
+(in the same directory as your `_plugins` folder). If you want to
+regenerate cached items, delete the cache folder.
 
 The `bundle` tag will concatenate the provided scripts and compress them
 (if desired), making a hash of the new file to use
@@ -192,9 +196,15 @@ Default: `false`.
 Jekyll Asset Bundler uses the
 [yui-compressor](https://github.com/sstephenson/ruby-yui-compressor) or
 [closure-compiler](https://github.com/documentcloud/closure-compiler) gems
-(when configured) and (obviously) jekyll.
+(when configured) and (obviously)
+[Jekyll](http://jekyllrb.com).
 
 ## Author
 
 Colin Kennedy moshen@GitHub
+
+## License
+
+[MIT](http://colken.mit-license.org),
+see LICENSE file.
 

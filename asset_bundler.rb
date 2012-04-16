@@ -145,6 +145,10 @@ END
         ret_config = @@default_config
       end
 
+      if context.registers[:site].config.key?("dev")
+        ret_config['dev'] = context.registers[:site].config["dev"] ? true : false
+      end
+
       if context.registers[:site].config['server']
         ret_config['dev'] = true
       end

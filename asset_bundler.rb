@@ -322,15 +322,17 @@ END
 
     def markup()
       return dev_markup() if @config['dev']
+      
+      cdn = @config['cdn'] || ''
       case @type
         when 'js'
-          "<script type='text/javascript' src='#{@base}#{@filename}'></script>\n"
+          "<script type='text/javascript' src='#{cdn}#{@base}#{@filename}'></script>\n"
         when 'coffee'
-          "<script type='text/coffeescript' src='#{@base}#{@filename}'></script>\n"
+          "<script type='text/coffeescript' src='#{cdn}#{@base}#{@filename}'></script>\n"
         when 'css'
-          "<link rel='stylesheet' type='text/css' href='#{@base}#{@filename}' />\n"
+          "<link rel='stylesheet' type='text/css' href='#{cdn}#{@base}#{@filename}' />\n"
         when 'less'
-          "<link rel='stylesheet/less' type='text/css' href='#{@base}#{@filename}' />\n"
+          "<link rel='stylesheet/less' type='text/css' href='#{cdn}#{@base}#{@filename}' />\n"
       end
     end
 

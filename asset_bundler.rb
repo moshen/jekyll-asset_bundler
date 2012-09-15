@@ -289,7 +289,12 @@ END
             i.puts(@content)
             i.close_write()
           end
-          @content = i.gets() if !outfile
+          if !outfile
+            @content = ""
+            i.each {|line|
+              @content << line
+            }
+          end
         }
       end
 

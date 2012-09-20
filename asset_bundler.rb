@@ -112,6 +112,7 @@ END
       'compile'        => { 'coffee' => false, 'less' => false },
       'compress'       => { 'js'     => false, 'css'  => false },
       'base_path'      => '/bundles/',
+      'cdn'            => '',
       'remove_bundled' => false,
       'dev'            => false
     }
@@ -143,6 +144,12 @@ END
         ret_config = @@default_config.deep_merge(context.registers[:site].config["asset_bundler"])
       else
         ret_config = @@default_config
+      end
+
+      # Check to make sure the base_path begins with a slash
+      #   This is to make sure that the path works with a potential base CDN url
+      if ret_config['base_path'] !~ /^\//
+        ret_config['base_path'].insert(0,'/')
       end
 
       if context.registers[:site].config.key?("dev")
@@ -327,7 +334,7 @@ END
 
     def markup()
       return dev_markup() if @config['dev']
-      
+
       cdn = @config['cdn'] || ''
       case @type
         when 'js'

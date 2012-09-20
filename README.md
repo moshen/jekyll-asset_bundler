@@ -40,7 +40,6 @@ in `my_source_dir/css/mystyle.css`.
 
 * Relative paths support
 * CoffeeScript and LessCSS compilation support
-* Google Closure Compiler support
 
 #### Notes
 
@@ -131,6 +130,7 @@ following represents the default configuration:
         js: false
         css: false
       base_path: /bundles/
+      cdn: 
       remove_bundled: false
       dev: false
 
@@ -170,7 +170,16 @@ of the Google Closure Compiler ( it's JavaScript only ).
 Where the bundles will be copied within your destination
 folder.
 
-Default: `bundles/`.
+Default: `/bundles/`.
+
+### cdn:
+
+The root path of your CDN (if you use one).
+For example: http://my-cdn.cloudfront.net/
+
+Jekyll Asset Bundler checks to make sure that this setting ends in a slash.
+
+Default: ` ` (blank).
 
 ### remove_bundled:
 

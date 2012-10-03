@@ -338,13 +338,13 @@ END
       cdn = @config['cdn'] || ''
       case @type
         when 'js'
-          "<script type='text/javascript' src='#{cdn}#{@base}#{@filename}'></script>\n"
+          "<script src='#{cdn}#{@base}#{@filename}'></script>\n"
         when 'coffee'
           "<script type='text/coffeescript' src='#{cdn}#{@base}#{@filename}'></script>\n"
         when 'css'
-          "<link rel='stylesheet' type='text/css' href='#{cdn}#{@base}#{@filename}' />\n"
+          "<link rel='stylesheet' href='#{cdn}#{@base}#{@filename}'>\n"
         when 'less'
-          "<link rel='stylesheet/less' type='text/css' href='#{cdn}#{@base}#{@filename}' />\n"
+          "<link rel='stylesheet/less' href='#{cdn}#{@base}#{@filename}'>\n"
       end
     end
 
@@ -353,13 +353,13 @@ END
       @files.each {|f|
         case @type
           when 'js'
-            output.concat("<script type='text/javascript' src='#{f}'></script>\n")
+            output.concat("<script src='#{f}'></script>\n")
           when 'coffee'
             output.concat("<script type='text/coffeescript' src='#{f}'></script>\n")
           when 'css'
-            output.concat("<link rel='stylesheet' type='text/css' href='#{f}' />\n")
+            output.concat("<link rel='stylesheet' href='#{f}'>\n")
           when 'less'
-            output.concat("<link rel='stylesheet/less' type='text/css' href='#{f}' />\n")
+            output.concat("<link rel='stylesheet/less' href='#{f}'>\n")
         end
       }
 

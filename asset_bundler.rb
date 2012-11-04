@@ -14,8 +14,6 @@ require 'uri'
 module Jekyll
 
   class BundleTag < Liquid::Block
-    @@supported_types = ['js', 'css']
-
     def initialize(tag_name, text, tokens)
       super
       @text = text 
@@ -66,7 +64,7 @@ END
     def add_file_by_type(file)
       if file =~ /\.([^\.]+)$/
         type = $1.downcase()
-        return if @@supported_types.index(type).nil?
+        return if Bundle.supported_types.index(type).nil?
         if !@files.key?(type)
           @files[type] = []
         end
@@ -127,6 +125,7 @@ END
       }
     }
     @@current_config = nil
+    @@supported_types = ['js', 'css']
     attr_reader :content, :hash, :filename, :base
 
     def initialize(files, type, context)
@@ -195,6 +194,10 @@ END
       end
 
       @@current_config
+    end
+
+    def self.supported_types
+      @@supported_types
     end
 
     def load_content()

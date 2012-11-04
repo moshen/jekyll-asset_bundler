@@ -170,6 +170,10 @@ If either :outfile or :infile are omitted, stdout and
 stdin will be used.  *WARNING*, stdin and stdout are done
 with IO.popen , which doesn't work on Windows
 
+**Note:** Some have reported other issues when using the yui-compressor or
+closure compiler gems on Windows. If you having trouble on windows, try
+specifying a command as outlined above.
+
 #### css:
 
 Takes the exact same arguments as `js:`, with the exception

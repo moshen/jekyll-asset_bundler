@@ -243,7 +243,7 @@ Jekyll Asset Bundler uses the
 
 ## Author
 
-Colin Kennedy moshen@GitHub
+Colin Kennedy moshen on GitHub
 
 ## License
 

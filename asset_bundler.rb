@@ -126,6 +126,7 @@ END
           Liquid::Template.parse("<link rel='stylesheet/less' type='text/css' href='{{url}}' />\n")
       }
     }
+    @@current_config = nil
     attr_reader :content, :hash, :filename, :base
 
     def initialize(files, type, context)
@@ -149,16 +150,17 @@ END
     end
 
     def self.config(context)
-      ret_config = nil
-      if context.registers[:site].config.key?("asset_bundler")
-        ret_config = @@default_config.deep_merge(context.registers[:site].config["asset_bundler"])
-        ret_config['markup_templates'].keys.each {|k|
-          if ret_config['markup_templates'][k].class != Liquid::Template
-            if ret_config['markup_templates'][k].class == String
-              ret_config['markup_templates'][k] =
-                Liquid::Template.parse(ret_config['markup_templates'][k]);
-            else
-              puts <<-END
+      if @@current_config.nil?
+        ret_config = nil
+        if context.registers[:site].config.key?("asset_bundler")
+          ret_config = @@default_config.deep_merge(context.registers[:site].config["asset_bundler"])
+          ret_config['markup_templates'].keys.each {|k|
+            if ret_config['markup_templates'][k].class != Liquid::Template
+              if ret_config['markup_templates'][k].class == String
+                ret_config['markup_templates'][k] =
+                  Liquid::Template.parse(ret_config['markup_templates'][k]);
+              else
+                puts <<-END
 Asset Bundler - Error: Problem parsing _config.yml
 
 The value for configuration option:
@@ -167,29 +169,32 @@ The value for configuration option:
 Is not recognized as a String for use as a valid template.
 Reverting to the default template.
 END
-              ret_config['markup_templates'][k] = @@default_config['markup_templates'][k];
+                ret_config['markup_templates'][k] = @@default_config['markup_templates'][k];
+              end
             end
-          end
-        }
-      else
-        ret_config = @@default_config
+          }
+        else
+          ret_config = @@default_config
+        end
+
+        # Check to make sure the base_path begins with a slash
+        #   This is to make sure that the path works with a potential base CDN url
+        if ret_config['base_path'] !~ /^\//
+          ret_config['base_path'].insert(0,'/')
+        end
+
+        if context.registers[:site].config.key?("dev")
+          ret_config['dev'] = context.registers[:site].config["dev"] ? true : false
+        end
+
+        if context.registers[:site].config['server']
+          ret_config['dev'] = true
+        end
+
+        @@current_config = ret_config
       end
 
-      # Check to make sure the base_path begins with a slash
-      #   This is to make sure that the path works with a potential base CDN url
-      if ret_config['base_path'] !~ /^\//
-        ret_config['base_path'].insert(0,'/')
-      end
-
-      if context.registers[:site].config.key?("dev")
-        ret_config['dev'] = context.registers[:site].config["dev"] ? true : false
-      end
-
-      if context.registers[:site].config['server']
-        ret_config['dev'] = true
-      end
-
-      ret_config
+      @@current_config
     end
 
     def load_content()

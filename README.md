@@ -90,9 +90,16 @@ Remote assets will be cached in the `_asset_bundler_cache` folder
 (in the same directory as your `_plugins` folder). If you want to
 regenerate cached items, delete the cache folder.
 
-The `bundle` tag will concatenate the provided scripts and compress them
-(if desired), making a hash of the new file to use
-as a filename.  The proper markup is inserted to include your bundle file.
+The `bundle` tag will concatenate the provided scripts and make a hash of
+the result.  This hash is used as a filename.  The Bundle is then compressed
+(if desired), and the final result cached in the `_asset_bundler_cache` folder.
+Therefore, the bundle is only recreated and compressed again if the source
+files have been modified.  This greatly speeds up future site builds.
+
+**Note:** Asset Bundler makes no attempt to clean up the cache folder.  If it
+has grown too large, simply delete it.
+
+The proper markup is finally inserted to include your bundle file.
 
 #### bundle_glob
 
@@ -133,6 +140,9 @@ following represents the default configuration:
       cdn: 
       remove_bundled: false
       dev: false
+      markup_templates:
+        js: "<script type='text/javascript' src='{{url}}'></script>\n"
+        css: "<link rel='stylesheet' type='text/css' href='{{url}}' />\n"
 
 Here is a breakdown of each configuration option under the top level
 `asset_bundler` key.
@@ -199,6 +209,29 @@ Dev mode is also automatically enabled when using
 is set to true.
 
 Default: `false`.
+
+### markup_templates:
+
+Use the relevant markup\_template options to override the default templates
+for inserting bundles.  Each option is parsed with `Liquid::Template.parse`
+and passed a `url` (String) parameter.
+
+**Note:** if you want newlines to be passed in properly, be sure to quote your
+templates in `_config.yml`.
+
+#### js:
+
+The default JavaScript markup is fairly verbose.  If you would like a modern
+replacement, try `"<script src='{{url}}'></script>\n"`.
+
+Default: `"<script type='text/javascript' src='{{url}}'></script>\n"`
+
+#### css:
+
+The default CSS is also verbose.  If you would like a modern
+replacement, try `"<link rel=stylesheet href='{{url}}'>\n"`.
+
+Default: `"<link rel='stylesheet' type='text/css' href='{{url}}' />\n"`
 
 ## Dependencies
 

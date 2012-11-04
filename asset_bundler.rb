@@ -114,7 +114,17 @@ END
       'base_path'      => '/bundles/',
       'cdn'            => '',
       'remove_bundled' => false,
-      'dev'            => false
+      'dev'            => false,
+      'markup_templates' => {
+        'js'     =>
+          Liquid::Template.parse("<script type='text/javascript' src='{{url}}'></script>\n"),
+        'coffee' =>
+          Liquid::Template.parse("<script type='text/coffeescript' src='{{url}}'></script>\n"),
+        'css'    =>
+          Liquid::Template.parse("<link rel='stylesheet' type='text/css' href='{{url}}' />\n"),
+        'less'   =>
+          Liquid::Template.parse("<link rel='stylesheet/less' type='text/css' href='{{url}}' />\n")
+      }
     }
     attr_reader :content, :hash, :filename, :base
 
@@ -142,6 +152,25 @@ END
       ret_config = nil
       if context.registers[:site].config.key?("asset_bundler")
         ret_config = @@default_config.deep_merge(context.registers[:site].config["asset_bundler"])
+        ret_config['markup_templates'].keys.each {|k|
+          if ret_config['markup_templates'][k].class != Liquid::Template
+            if ret_config['markup_templates'][k].class == String
+              ret_config['markup_templates'][k] =
+                Liquid::Template.parse(ret_config['markup_templates'][k]);
+            else
+              puts <<-END
+Asset Bundler - Error: Problem parsing _config.yml
+
+The value for configuration option:
+  asset_bundler => markup_templates => #{k}
+
+Is not recognized as a String for use as a valid template.
+Reverting to the default template.
+END
+              ret_config['markup_templates'][k] = @@default_config['markup_templates'][k];
+            end
+          end
+        }
       else
         ret_config = @@default_config
       end
@@ -336,31 +365,15 @@ END
       return dev_markup() if @config['dev']
 
       cdn = @config['cdn'] || ''
-      case @type
-        when 'js'
-          "<script type='text/javascript' src='#{cdn}#{@base}#{@filename}'></script>\n"
-        when 'coffee'
-          "<script type='text/coffeescript' src='#{cdn}#{@base}#{@filename}'></script>\n"
-        when 'css'
-          "<link rel='stylesheet' type='text/css' href='#{cdn}#{@base}#{@filename}' />\n"
-        when 'less'
-          "<link rel='stylesheet/less' type='text/css' href='#{cdn}#{@base}#{@filename}' />\n"
-      end
+      @config['markup_templates'][@type].render('url' => "#{cdn}#{@base}#{@filename}")
     end
 
     def dev_markup()
       output = ''
       @files.each {|f|
-        case @type
-          when 'js'
-            output.concat("<script type='text/javascript' src='#{f}'></script>\n")
-          when 'coffee'
-            output.concat("<script type='text/coffeescript' src='#{f}'></script>\n")
-          when 'css'
-            output.concat("<link rel='stylesheet' type='text/css' href='#{f}' />\n")
-          when 'less'
-            output.concat("<link rel='stylesheet/less' type='text/css' href='#{f}' />\n")
-        end
+        output.concat(
+          @config['markup_templates'][@type].render('url' => "#{f}")
+        )
       }
 
       return output

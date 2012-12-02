@@ -43,7 +43,7 @@ in `my_source_dir/css/mystyle.css`.
 
 #### Notes
 
-*v0.05* - Changed from using Liquid::Tags to Liquid::Blocks.
+**v0.05** - Changed from using Liquid::Tags to Liquid::Blocks.
 This will break on existing bundle markup if you upgrade.
 
 Why change it?  Well, Liquid::Tags have to be on one line,
@@ -257,7 +257,7 @@ Jekyll Asset Bundler uses the
 
 ## Author
 
-Colin Kennedy moshen on GitHub
+Colin Kennedy, moshen on GitHub
 
 ## License
 

@@ -112,7 +112,7 @@ END
       'compile'        => { 'coffee' => false, 'less' => false },
       'compress'       => { 'js'     => false, 'css'  => false },
       'base_path'      => '/bundles/',
-      'cdn'            => '',
+      'server_url'     => '',
       'remove_bundled' => false,
       'dev'            => false,
       'markup_templates' => {
@@ -155,6 +155,7 @@ END
         ret_config = nil
         if context.registers[:site].config.key?("asset_bundler")
           ret_config = @@default_config.deep_merge(context.registers[:site].config["asset_bundler"])
+
           ret_config['markup_templates'].keys.each {|k|
             if ret_config['markup_templates'][k].class != Liquid::Template
               if ret_config['markup_templates'][k].class == String
@@ -174,6 +175,10 @@ END
               end
             end
           }
+
+          if context.registers[:site].config['asset_bundler'].key?('cdn') and ret_config['server_url'].empty?
+            ret_config['server_url'] = context.registers[:site].config['asset_bundler']['cdn']
+          end
         else
           ret_config = @@default_config
         end
@@ -374,8 +379,9 @@ END
     def markup()
       return dev_markup() if @config['dev']
 
-      cdn = @config['cdn'] || ''
-      @config['markup_templates'][@type].render('url' => "#{cdn}#{@base}#{@filename}")
+      @config['markup_templates'][@type].render(
+        'url' => "#{@config['server_url']}#{@base}#{@filename}"
+      )
     end
 
     def dev_markup()

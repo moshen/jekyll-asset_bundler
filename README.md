@@ -51,6 +51,12 @@ whereas Liquid::Blocks do not, also it opens up some more
 flexibility, as additional options could be included in the
 tag text.
 
+**v0.08** - Changed the `cdn` config parameter to `server_url` in order to be
+more generic.  For the time being, `cdn` still works (see below).
+
+Why change it?  There seemed to be a little confusion about the parameter name
+and what the parameter does.
+
 #### Is it production ready?
 
 Consider this beta software, though for small Jekyll sites you
@@ -137,7 +143,7 @@ following represents the default configuration:
         js: false
         css: false
       base_path: /bundles/
-      cdn: 
+      server_url:
       remove_bundled: false
       dev: false
       markup_templates:
@@ -186,9 +192,13 @@ folder.
 
 Default: `/bundles/`.
 
-### cdn:
+### server_url:
 
-The root path of your CDN (if you use one).
+**NOTE:** In v0.07 and earlier this setting was `cdn`.  The `cdn` key still
+works and will act as an alias.  However, if the `server_url` key is set, it
+will override `cdn`.
+
+The root path of your server\_url or CDN (if you use one).
 For example: http://my-cdn.cloudfront.net/
 
 Jekyll Asset Bundler checks to make sure that this setting ends in a slash.

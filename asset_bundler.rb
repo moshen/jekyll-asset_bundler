@@ -247,8 +247,14 @@ END
     end
 
     def cache_dir()
-      cache_dir = File.expand_path( "../_asset_bundler_cache",
-                                    @context.registers[:site].plugins )
+	    plugin_conf = @context.registers[:site].plugins
+			# Hack for jekyll versions before 0.12.0
+			if plugin_conf.kind_of?(Array)
+			  plugin_dir = plugin_conf.first
+		  else
+		    plugin_dir = plugin_conf
+		  end
+      cache_dir = File.expand_path( "../_asset_bundler_cache", plugin_dir)
       if( !File.directory?(cache_dir) )
         FileUtils.mkdir_p(cache_dir)
       end

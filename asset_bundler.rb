@@ -194,7 +194,9 @@ END
           ret_config['dev'] = context.registers[:site].config["dev"] ? true : false
         end
 
-        if context.registers[:site].config['serving']
+        # Jekyll version 1.0 will change server to serving
+        # TODO: Simplify this when Jekyll v1 is released
+        if context.registers[:site].config['server'] || context.registers[:site].config['serving']
           ret_config['dev'] = true
         end
 

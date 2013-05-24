@@ -194,8 +194,7 @@ END
           ret_config['dev'] = context.registers[:site].config["dev"] ? true : false
         end
 
-        # Jekyll version 1.0 will change server to serving
-        # TODO: Simplify this when Jekyll v1 is released
+	    # Let's assume that when flag 'watch' is enabled, we want dev mode
         if context.registers[:site].config['watch']
           ret_config['dev'] = true
         end
@@ -250,13 +249,13 @@ END
     end
 
     def cache_dir()
-	    plugin_conf = @context.registers[:site].plugins
-			# Hack for jekyll versions before 0.12.0
-			if plugin_conf.kind_of?(Array)
-			  plugin_dir = plugin_conf.first
-		  else
-		    plugin_dir = plugin_conf
-		  end
+	  plugin_conf = @context.registers[:site].plugins
+      # Hack for jekyll versions before 0.12.0
+      if plugin_conf.kind_of?(Array)
+        plugin_dir = plugin_conf.first
+	  else
+        plugin_dir = plugin_conf
+      end
       cache_dir = File.expand_path( "../_asset_bundler_cache", plugin_dir)
       if( !File.directory?(cache_dir) )
         FileUtils.mkdir_p(cache_dir)

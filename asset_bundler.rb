@@ -196,7 +196,7 @@ END
 
         # Jekyll version 1.0 will change server to serving
         # TODO: Simplify this when Jekyll v1 is released
-        if context.registers[:site].config['server'] || context.registers[:site].config['serving']
+        if context.registers[:site].config['watch']
           ret_config['dev'] = true
         end
 

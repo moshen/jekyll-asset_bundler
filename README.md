@@ -57,6 +57,13 @@ more generic.  For the time being, `cdn` still works (see below).
 Why change it?  There seemed to be a little confusion about the parameter name
 and what the parameter does.
 
+**v0.11** - `jekyll --watch` now turns on dev mode.  Removed code for
+compatibility with versions of Jekyll pre 1.0.
+
+Why change it?  `jekyll --watch` isn't really supported by the plugin anyway.
+Also, Jekyll is changing and I don't want this to be any more of an
+unmaintainable mess.
+
 #### Is it production ready?
 
 Consider this beta software, though for small Jekyll sites you
@@ -213,6 +220,9 @@ bundles from the destination folder.
 Default: `false`.
 
 ### dev:
+
+**NOTE:** In v0.10 and earlier, dev mode was not enabled automatically for
+`--auto` or `--watch` mode.
 
 If set to true, enables dev mode.  When dev mode is active,
 no bundles are created and all the referenced files are

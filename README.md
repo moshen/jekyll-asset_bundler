@@ -219,7 +219,7 @@ no bundles are created and all the referenced files are
 included individually without modification.
 
 Dev mode is also automatically enabled when using
-`jekyll server` or when a top level configuration key: `dev`
+`jekyll server`, `jekyll --watch` or when a top level configuration key: `dev`
 is set to true.
 
 Default: `false`.

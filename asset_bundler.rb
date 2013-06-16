@@ -194,8 +194,8 @@ END
           ret_config['dev'] = context.registers[:site].config["dev"] ? true : false
         end
 
-	    # Let's assume that when flag 'watch' is enabled, we want dev mode
-        if context.registers[:site].config['watch']
+        # Let's assume that when flag 'watch' or 'serving' is enabled, we want dev mode
+        if context.registers[:site].config['serving'] || context.registers[:site].config['watch']
           ret_config['dev'] = true
         end
 

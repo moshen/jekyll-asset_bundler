@@ -153,6 +153,7 @@ following represents the default configuration:
       server_url:
       remove_bundled: false
       dev: false
+      bundle_name: false
       markup_templates:
         js: "<script type='text/javascript' src='{{url}}'></script>\n"
         css: "<link rel='stylesheet' type='text/css' href='{{url}}' />\n"
@@ -233,6 +234,12 @@ Dev mode is also automatically enabled when using
 is set to true.
 
 Default: `false`.
+
+### bundle_name:
+
+Overwrites bundle name. When false, MD5 hash of the content is used instead.
+
+Default: `false`
 
 ### markup_templates:
 

@@ -11,7 +11,6 @@ require 'yaml'
 require 'digest/md5'
 require 'net/http'
 require 'uri'
-require "awesome_print"
 
 module Jekyll
 

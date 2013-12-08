@@ -11,6 +11,7 @@ require 'yaml'
 require 'digest/md5'
 require 'net/http'
 require 'uri'
+require "awesome_print"
 
 module Jekyll
 
@@ -225,7 +226,20 @@ END
           f.sub!( /^https/i, "http" ) if $1 =~ /^https/i
           @content.concat(remote_asset_cache(URI(f)))
         else
-          @content.concat(File.read(File.join(src, f)))
+          # Load file from path and render it if it contains tags
+
+          # Extract the path parts
+          f_path = f
+          f = f.split('/')[-1]
+          f_path = f_path.gsub( /#{f}$/, '')
+
+          # Render the page
+          page = Page.new(@context.registers[:site], src, f_path, f)
+          page.render(@context.registers[:site].layouts,
+                      @context.registers[:site].site_payload())
+
+          @content.concat(page.output)
+          page = nil
         end
       }
 

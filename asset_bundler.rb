@@ -3,7 +3,7 @@
 #
 # Author : Colin Kennedy
 # Repo   : http://github.com/moshen/jekyll-asset_bundler
-# Version: 0.11
+# Version: 0.12
 # License: MIT, see LICENSE file
 #
 

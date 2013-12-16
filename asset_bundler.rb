@@ -228,17 +228,14 @@ END
           # Load file from path and render it if it contains tags
 
           # Extract the path parts
-          f_path = f
-          f = f.split('/')[-1]
-          f_path = f_path.gsub( /#{f}$/, '')
+          f = File.split(f)
 
-          # Render the page
-          page = Page.new(@context.registers[:site], src, f_path, f)
+          # Render the page                               path  file
+          page = Page.new(@context.registers[:site], src, f[0], f[1])
           page.render(@context.registers[:site].layouts,
                       @context.registers[:site].site_payload())
 
           @content.concat(page.output)
-          page = nil
         end
       }
 

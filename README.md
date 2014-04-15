@@ -169,7 +169,7 @@ modify compression behavior.
 
 To compress with the yui-compressor gem, use 'yui' here,
 to compress with the closure compiler gem, use 'closure' here,
-to compress with a custom command, enter it for the
+to compress with a custom system command, enter it for the
 appropriate asset type:
 
     compress:

@@ -168,15 +168,19 @@ modify compression behavior.
 #### js:
 
 To compress with the yui-compressor gem, use 'yui' here,
-to compress with the closure compiler gem, use 'closure' here,
-to compress with a custom command, enter it for the
+to compress with the closure compiler gem, use 'closure' here.
+
+    compress:
+      js: yui
+
+To compress with a system command, enter it for the
 appropriate asset type:
 
     compress:
       js: yuicompressor -o :outfile :infile
 
-This example will run the yuicompressor command while
-substituting :outfile and :infile for temporary files
+This example will run a yuicompressor command from your PATH 
+while substituting :outfile and :infile for temporary files
 stored in `_asset_bundler_cache`.
 
 If either :outfile or :infile are omitted, stdout and

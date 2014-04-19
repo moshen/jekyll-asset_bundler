@@ -177,9 +177,9 @@ To compress with a system command, enter it for the
 appropriate asset type:
 
     compress:
-      js: yuicompressor -o :outfile :infile
+      js: uglifyjs :infile -o :outfile -c
 
-This example will run a yuicompressor command from your PATH 
+This example will run a `uglifyjs` command from your PATH
 while substituting :outfile and :infile for temporary files
 stored in `_asset_bundler_cache`.
 

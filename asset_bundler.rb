@@ -117,6 +117,7 @@ END
       'server_url'     => '',
       'remove_bundled' => false,
       'dev'            => false,
+      'bundle_name'    => false,
       'markup_templates' => {
         'js'     =>
           Liquid::Template.parse("<script type='text/javascript' src='{{url}}'></script>\n"),

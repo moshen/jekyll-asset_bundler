@@ -241,9 +241,9 @@ Default: `false`.
 
 ### bundle_name:
 
-Overwrites bundle name. When false, MD5 hash of the content is used instead.
+Overrides bundle name. When false, MD5 hash of the content is used instead.
 
-Default: `false`
+Default: `false`.
 
 ### markup_templates:
 

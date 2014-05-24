@@ -240,7 +240,7 @@ END
         end
       }
 
-      @hash = Digest::MD5.hexdigest(@content)
+      @hash = @config['bundle_name'] || Digest::MD5.hexdigest(@content)
       @filename = "#{@hash}.#{@type}"
       cache_file = File.join(cache_dir(), @filename)
 

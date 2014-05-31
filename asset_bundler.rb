@@ -239,6 +239,9 @@ END
 
           @content.concat(page.output)
         end
+
+        # In case the content does not end in a newline
+        @content.concat("\n")
       }
 
       @hash = @config['bundle_name'] || Digest::MD5.hexdigest(@content)

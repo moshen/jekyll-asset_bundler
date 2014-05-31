@@ -416,6 +416,10 @@ END
     # Methods required by Jekyll::Site to write out the bundle
     #   This is where we give Jekyll::Bundle a Jekyll::StaticFile
     #   duck call and send it on its way.
+    def relative_path
+      File.join(@base, @filename)
+    end
+
     def destination(dest)
       File.join(dest, @base, @filename)
     end

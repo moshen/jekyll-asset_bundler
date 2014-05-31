@@ -25,10 +25,7 @@ module Jekyll
       src = context.registers[:site].source
       raw_markup = super(context)
       begin
-        # Some ugliness to work around the Block returning an array
-        #   in liquid <2.4.0
-        # Note: Jekyll 1.0.x only require liquid 2.3
-        @assets = YAML::load(raw_markup.kind_of?(Array) ? raw_markup.first : raw_markup)
+        @assets = YAML::load(raw_markup)
       rescue
         puts <<-END
 Asset Bundler - Error: Problem parsing a YAML bundle

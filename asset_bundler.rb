@@ -196,7 +196,11 @@ END
 
         # Let's assume that when flag 'watch' or 'serving' is enabled, we want dev mode
         if context.registers[:site].config['serving'] || context.registers[:site].config['watch']
-          ret_config['dev'] = true
+          # ... unless we set servenodev to 'true' in config
+          if !ret_config['servenodev']
+            ret_config['dev'] = true
+          end
+
         end
 
         @@current_config = ret_config

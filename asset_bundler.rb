@@ -377,9 +377,9 @@ END
       require 'yui/compressor'
       case @type
         when 'js'
-          @content = YUI::JavaScriptCompressor.new.compress(@content)
+          @content = YUI::JavaScriptCompressor.new(:java_opts => '-Xss8m').compress(@content)
         when 'css'
-          @content = YUI::CssCompressor.new.compress(@content)
+          @content = YUI::CssCompressor.new(:java_opts => '-Xss8m').compress(@content)
       end
     end
 

@@ -316,7 +316,12 @@ END
         when 'yui'
           compress_yui()
         when 'closure'
-          compress_closure()
+          compress_closure({})
+        when 'closure_advanced'
+          compress_closure({
+            :compilation_level => 'ADVANCED_OPTIMIZATIONS',
+            :externs => (@config['compress']['js_externs'] || []).map { |d| File.join(@context.registers[:site].source, d) }
+          })
         else
           compress_command()
       end
@@ -383,11 +388,11 @@ END
       end
     end
 
-    def compress_closure()
+    def compress_closure(closure_args)
       require 'closure-compiler'
       case @type
         when 'js'
-          @content = Closure::Compiler.new.compile(@content)
+          @content = Closure::Compiler.new(closure_args).compile(@content)
       end
     end
 

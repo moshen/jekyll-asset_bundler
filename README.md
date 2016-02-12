@@ -170,6 +170,7 @@ modify compression behavior.
 
 To compress with the yui-compressor gem, use 'yui' here,
 to compress with the closure compiler gem, use 'closure' here.
+Use 'closure_advanced' to compress with the closure compiler gem using [ADVANCED_OPTIMIZATIONS](https://developers.google.com/closure/compiler/docs/compilation_levels#advanced_optimizations).
 
     compress:
       js: yui
@@ -196,6 +197,14 @@ specifying a command as outlined above.
 
 Takes the exact same arguments as `js:`, with the exception
 of the Google Closure Compiler ( it's JavaScript only ).
+
+#### js_externs:
+
+When using closure compiler with [ADVANCED_OPTIMIZATIONS](https://developers.google.com/closure/compiler/docs/compilation_levels#advanced_optimizations) enabled (see above), externs files can be passed to the compiler:
+
+    js_externs:
+        - path/to/externs.js
+        - other/path/to/externs.js
 
 ### base_path:
 

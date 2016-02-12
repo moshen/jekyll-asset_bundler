@@ -243,7 +243,8 @@ END
 
       @hash = @config['bundle_name'] || Digest::MD5.hexdigest(@content)
       @filename = "#{@hash}.#{@type}"
-      cache_file = File.join(cache_dir(), @filename)
+      cache_hash = Digest::MD5.hexdigest("#{@filename}#{@config['compress']}");
+      cache_file = File.join(cache_dir(), "#{cache_hash}.#{@type}")
 
       if File.readable?(cache_file) and @config['compress'][@type]
         @content = File.read(cache_file)
@@ -316,7 +317,12 @@ END
         when 'yui'
           compress_yui()
         when 'closure'
-          compress_closure()
+          compress_closure({})
+        when 'closure_advanced'
+          compress_closure({
+            :compilation_level => 'ADVANCED_OPTIMIZATIONS',
+            :externs => (@config['compress']['js_externs'] || []).map { |d| File.join(@context.registers[:site].source, d) }
+          })
         else
           compress_command()
       end
@@ -383,11 +389,11 @@ END
       end
     end
 
-    def compress_closure()
+    def compress_closure(closure_args)
       require 'closure-compiler'
       case @type
         when 'js'
-          @content = Closure::Compiler.new.compile(@content)
+          @content = Closure::Compiler.new(closure_args).compile(@content)
       end
     end
 

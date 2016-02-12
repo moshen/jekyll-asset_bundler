@@ -243,7 +243,8 @@ END
 
       @hash = @config['bundle_name'] || Digest::MD5.hexdigest(@content)
       @filename = "#{@hash}.#{@type}"
-      cache_file = File.join(cache_dir(), @filename)
+      cache_hash = Digest::MD5.hexdigest("#{@filename}#{@config['compress']}");
+      cache_file = File.join(cache_dir(), "#{cache_hash}.#{@type}")
 
       if File.readable?(cache_file) and @config['compress'][@type]
         @content = File.read(cache_file)

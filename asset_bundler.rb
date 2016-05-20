@@ -149,6 +149,18 @@ END
         load_content()
       end
     end
+    
+    def to_liquid
+      {
+        "extname"       => "."+type,
+        "modified_time" => Time.now,
+        "path"          => base+filename
+      }
+    end
+    
+    def type
+      @type ||= nil
+    end
 
     def self.config(context)
       if @@current_config.nil?
